@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Ivan Moreno",
+    "section": "",
+    "text": "📄 Download CV: English | Español | Deutsch"
+  },
+  {
+    "objectID": "index.html#hello",
+    "href": "index.html#hello",
+    "title": "Ivan Moreno",
+    "section": "Hello! 👋",
+    "text": "Hello! 👋\n-I’m an Economist and political scientist with 8+ years of experience implementing statistical tools for analysis and decision-making in NGOs, public and private sectors. Currently pursuing MSc in Development Economics at University of Göttingen with DAAD EPOS scholarship.\nMy approach combines quantitative analysis (R, Python, QGIS) with participatory fieldwork to create data-driven solutions for territorial development."
+  },
+  {
+    "objectID": "index.html#what-i-do",
+    "href": "index.html#what-i-do",
+    "title": "Ivan Moreno",
+    "section": "What I Do",
+    "text": "What I Do\n🔍 Data Analysis & Geospatial Analysis - Statistical analysis and econometric modeling - Interactive dashboards and visualization (R, Shiny) - Territorial analysis and mapping (QGIS, Google Earth Engine)\n🤝 Participatory Methodologies - Community engagement and workshop facilitation - Co-creation methodologies for rural development - Multi-stakeholder coordination processes\n📊 Research & Policy - Survey design and analysis - Public policy evaluation and design - Academic research in development economics"
+  },
+  {
+    "objectID": "index.html#featured-projects",
+    "href": "index.html#featured-projects",
+    "title": "Ivan Moreno",
+    "section": "Featured Projects",
+    "text": "Featured Projects\n\nRural Scholarship Allocation Tool\nInterra Foundation (Colombia) | 2023-2024\nInteractive Shiny application optimizing scholarship distribution for 500+ rural youth using multi-criteria algorithms.\nView Application →\n\n\nNational Strategy for Coastal Municipalities\nNational Planning Department (Colombia) | 2020-2023\nLed comprehensive policy design for 47 coastal municipalities, combining quantitative analysis with 1,000+ participant workshops.\nView Policy Document →\n\n\nLocal Leaders Identification System\nResearch Project | 2017-2020\nDeveloped network analysis algorithm (“Godfather Index”) to identify community leaders, impacting 2,000+ youth across 7 municipalities.\nRead Thesis →"
+  },
+  {
+    "objectID": "index.html#current-position",
+    "href": "index.html#current-position",
+    "title": "Ivan Moreno",
+    "section": "Current Position",
+    "text": "Current Position\nResearch Assistant | Centre for Modern Indian Studies (CEMIS) - University of Göttingen\nJune 2023 - Present\nLeading field data collection project in Morocco, developing methods to integrate satellite data with survey information for territorial analysis."
+  },
+  {
+    "objectID": "index.html#technical-skills",
+    "href": "index.html#technical-skills",
+    "title": "Ivan Moreno",
+    "section": "Technical Skills",
+    "text": "Technical Skills\nProgramming: R (Advanced), Python (Intermediate), SQL\nGeospatial: QGIS, Google Earth Engine, sf (R)\nVisualization: ggplot2, Shiny, interactive dashboards\nAnalysis: Econometrics, machine learning, network analysis\n\n📄 Download CV: English | Español | Deutsch\n\n\nAvailable for remote projects after October 2025 | Open to relocation after November 2025"
+  }
+]

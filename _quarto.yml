@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Ivan Moreno"
+  description: "Economic Development Specialist & Data Analyst"
+  
+  navbar:
+    background: primary
+    right:
+      - icon: github
+        href: https://github.com/ifmoreno
+      - icon: linkedin
+        href: https://linkedin.com/in/ivan-felipe-moreno-guzm%C3%A1n-29511899/
+
+  page-footer:
+    center: |
+      © 2025 Ivan Moreno. Made with [Quarto](https://quarto.org)
+    background: light
+
+format:
+  html:
+    theme: flatly
+    toc: true
+    toc-location: right
+    highlight-style: github
+    smooth-scroll: true
+
+execute:
+  freeze: auto
