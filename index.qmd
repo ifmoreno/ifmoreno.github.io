@@ -24,7 +24,7 @@ about:
   
 ## Hello! 👋
   
--I'm an **Economist** and **political scientist** with 8+ years of experience implementing statistical tools for analysis and decision-making in NGOs, public and private sectors. Currently pursuing MSc in Development Economics at University of Göttingen with DAAD EPOS scholarship.
+I'm an **Economist** and **political scientist** with 8+ years of experience implementing statistical tools for analysis and decision-making in NGOs, public and private sectors. Currently pursuing MSc in Development Economics at University of Göttingen with DAAD EPOS scholarship.
 
 My approach combines quantitative analysis (R, Python, QGIS) with participatory fieldwork to create data-driven solutions for territorial development.
 
@@ -61,14 +61,14 @@ Interactive Shiny application optimizing scholarship distribution for 500+ rural
 ### National Strategy for Coastal Municipalities
 *National Planning Department (Colombia) | 2020-2023*
 
-Led comprehensive policy design for 47 coastal municipalities, combining quantitative analysis with 1,000+ participant workshops.
+Coordinated the design and drafting of a public policy document for 47 coastal municipalities through regional workshops and quantitative analysis
 
 [**View Policy Document →**](https://portalterritorial.dnp.gov.co/AdmCPBioceanica/iCosterosMunicipios?idSelect=4){.btn .btn-outline-primary target="_blank"}
 
 ### Local Leaders Identification System
 *Research Project | 2017-2020*
 
-Developed network analysis algorithm ("Godfather Index") to identify community leaders, impacting 2,000+ youth across 7 municipalities.
+Applied network analysis methodology (Godfather Index) to identify community leaders and analyze coordination dynamics, impacting youth across 7 municipalities.
 
 [**Read Thesis →**](http://hdl.handle.net/1992/43811){.btn .btn-outline-primary target="_blank"}
 
@@ -79,7 +79,7 @@ Developed network analysis algorithm ("Godfather Index") to identify community l
 **Research Assistant** | Centre for Modern Indian Studies (CEMIS) - University of Göttingen  
 *June 2023 - Present*
 
-Leading field data collection project in Morocco, developing methods to integrate satellite data with survey information for territorial analysis.
+Coordination of field data collection project in Morocco, developing methods to integrate satellite data with survey information for impact evaluation.
 
 ---
 
