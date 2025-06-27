@@ -1,10 +1,115 @@
 [
   {
-    "objectID": "posts/first_draft.html",
-    "href": "posts/first_draft.html",
-    "title": "Quarto experimentation - 1:23 am",
+    "objectID": "posts/tidytuesday_25_06_17.html",
+    "href": "posts/tidytuesday_25_06_17.html",
+    "title": "API Specs",
     "section": "",
-    "text": "My wife lost her entire work of today, apparently the version control tool didn’t work well. I don’t want to left her alone, so I’m here, learning how to use quarto."
+    "text": "# Data\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.0.4     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\ntuesdata &lt;- tidytuesdayR::tt_load('2025-06-17')\n\n---- Compiling #TidyTuesday Information for 2025-06-17 ----\n--- There are 5 files available ---\n\n\n── Downloading files ───────────────────────────────────────────────────────────\n\n  1 of 5: \"api_categories.csv\"\n  2 of 5: \"api_info.csv\"\n  3 of 5: \"api_logos.csv\"\n  4 of 5: \"api_origins.csv\"\n  5 of 5: \"apisguru_apis.csv\"\n\napi_categories &lt;- tuesdata$api_categories\napi_info &lt;- tuesdata$api_info\napi_logos &lt;- tuesdata$api_logos\napi_origins &lt;- tuesdata$api_origins\napisguru_apis &lt;- tuesdata$apisguru_apis\n\n\n# Ver la estructura de los datos (tipos de variables)\nglimpse(apisguru_apis)\n\nRows: 2,529\nColumns: 9\n$ name                      &lt;chr&gt; \"1forge.com\", \"1password.com:events\", \"1pass…\n$ version                   &lt;chr&gt; \"0.0.1\", \"1.0.0\", \"1.5.7\", \"6\", \"1.1.0\", \"1.…\n$ added                     &lt;dttm&gt; 2017-05-30 08:34:14, 2021-07-19 10:17:09, 2…\n$ updated                   &lt;dttm&gt; 2017-06-27 16:49:57, 2023-02-27 15:08:09, 2…\n$ swagger_url               &lt;chr&gt; \"https://api.apis.guru/v2/specs/1forge.com/0…\n$ openapi_ver               &lt;chr&gt; \"2.0\", \"3.0.0\", \"3.0.2\", \"3.0.0\", \"3.0.1\", \"…\n$ link                      &lt;chr&gt; \"https://api.apis.guru/v2/specs/1forge.com/0…\n$ external_docs_description &lt;chr&gt; NA, NA, NA, NA, NA, NA, \"API Documentation\",…\n$ external_docs_url         &lt;chr&gt; NA, NA, NA, NA, NA, NA, \"https://www.abstrac…\n\n# Resumen de las columnas numéricas (si las hubiera)\nsummary(apisguru_apis)\n\n     name             version              added                    \n Length:2529        Length:2529        Min.   :2015-06-11 00:06:11  \n Class :character   Class :character   1st Qu.:2018-03-10 10:08:28  \n Mode  :character   Mode  :character   Median :2020-02-28 16:47:57  \n                                       Mean   :2019-11-20 11:52:53  \n                                       3rd Qu.:2021-02-07 16:13:22  \n                                       Max.   :2023-04-20 23:20:25  \n    updated                    swagger_url        openapi_ver       \n Min.   :2016-04-10 23:18:20   Length:2529        Length:2529       \n 1st Qu.:2019-07-25 10:27:32   Class :character   Class :character  \n Median :2021-02-07 16:23:46   Mode  :character   Mode  :character  \n Mean   :2021-01-17 07:49:56                                        \n 3rd Qu.:2023-03-06 07:12:59                                        \n Max.   :2023-04-21 23:18:02                                        \n     link           external_docs_description external_docs_url \n Length:2529        Length:2529               Length:2529       \n Class :character   Class :character          Class :character  \n Mode  :character   Mode  :character          Mode  :character  \n                                                                \n                                                                \n                                                                \n\n\n\n# Asegurarte de que 'added' es un formato de fecha\napisguru_apis &lt;- apisguru_apis %&gt;%\n  mutate(added_year = year(added)) # Extraer el año de la fecha\n\n# Contar cuántas APIs se añadieron cada año\napis_by_year &lt;- apisguru_apis %&gt;%\n  count(added_year) %&gt;% # Cuenta las ocurrencias de cada año\n  arrange(added_year) # Ordena por año\n\n# Ver el resultado\nprint(apis_by_year)\n\n# A tibble: 9 × 2\n  added_year     n\n       &lt;dbl&gt; &lt;int&gt;\n1       2015    73\n2       2016    62\n3       2017   355\n4       2018   451\n5       2019   192\n6       2020   538\n7       2021   548\n8       2022    47\n9       2023   263\n\n\n\n# Contar cuántas APIs hay en cada categoría\ncategory_counts &lt;- api_categories %&gt;%\n  count(apisguru_category, sort = TRUE) # sort = TRUE ordena de mayor a menor\n\n# Ver el resultado\nprint(category_counts)\n\n# A tibble: 42 × 2\n   apisguru_category     n\n   &lt;chr&gt;             &lt;int&gt;\n 1 cloud               955\n 2 media               340\n 3 open_data           318\n 4 analytics           284\n 5 developer_tools     168\n 6 ecommerce            78\n 7 financial            72\n 8 messaging            62\n 9 entertainment        61\n10 telecom              60\n# ℹ 32 more rows\n\n\n\nggplot(apis_by_year, aes(x = added_year, y = n)) +\n  geom_col(fill = \"steelblue\") + # geom_col para gráficos de barras con conteos\n  labs(title = \"Número de APIs Añadidas a apis.guru por Año\",\n       x = \"Año de Adición\",\n       y = \"Número de APIs\") +\n  theme_minimal() # Un tema de gráfico limpio\n\n\n\n\n\n\n\n\n\nggplot(category_counts %&gt;% head(10), aes(x = reorder(apisguru_category, n), y = n)) +\n  geom_col(fill = \"lightgreen\") +\n  coord_flip() + # Voltea las coordenadas para que las etiquetas sean más legibles\n  labs(title = \"Top 10 Categorías de APIs más Comunes\",\n       x = \"Categoría de API\",\n       y = \"Número de APIs\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n#other\n\njoined_data &lt;- apisguru_apis %&gt;%\n  inner_join(api_categories, by = \"name\")\n\njoined_data &lt;- joined_data %&gt;%\n  mutate(\n    added_year = year(as_datetime(added))\n    )\n\nglimpse(joined_data)\n\nRows: 2,783\nColumns: 11\n$ name                      &lt;chr&gt; \"1forge.com\", \"1password.com:events\", \"1pass…\n$ version                   &lt;chr&gt; \"0.0.1\", \"1.0.0\", \"1.5.7\", \"6\", \"1.1.0\", \"1.…\n$ added                     &lt;dttm&gt; 2017-05-30 08:34:14, 2021-07-19 10:17:09, 2…\n$ updated                   &lt;dttm&gt; 2017-06-27 16:49:57, 2023-02-27 15:08:09, 2…\n$ swagger_url               &lt;chr&gt; \"https://api.apis.guru/v2/specs/1forge.com/0…\n$ openapi_ver               &lt;chr&gt; \"2.0\", \"3.0.0\", \"3.0.2\", \"3.0.0\", \"3.0.1\", \"…\n$ link                      &lt;chr&gt; \"https://api.apis.guru/v2/specs/1forge.com/0…\n$ external_docs_description &lt;chr&gt; NA, NA, NA, NA, NA, NA, \"API Documentation\",…\n$ external_docs_url         &lt;chr&gt; NA, NA, NA, NA, NA, NA, \"https://www.abstrac…\n$ added_year                &lt;dbl&gt; 2017, 2021, 2021, 2017, 2019, 2021, 2021, 20…\n$ apisguru_category         &lt;chr&gt; \"financial\", \"security\", \"security\", \"securi…\n\n\n\ncategory_year_counts &lt;- joined_data %&gt;%\n  group_by(added_year, apisguru_category) %&gt;%\n  summarise(n_apis = n(), .groups = 'drop') %&gt;%\n  #filter(added_year  2022) %&gt;%  \n  arrange(added_year, desc(n_apis)) \n\n\n# Identificar las top N categorías para enfocarse en las más relevantes\ntop_categories &lt;- category_year_counts %&gt;%\n  group_by(apisguru_category) %&gt;%\n  summarise(total_n_apis = sum(n_apis), .groups = 'drop') %&gt;%\n  top_n(10, total_n_apis) %&gt;% # Seleccionar las 10 categorías con más APIs en total\n  pull(apisguru_category) # Extraer solo los nombres de las categorías\n\n# Filtrar los datos para incluir solo estas top categorías\nfiltered_category_data &lt;- category_year_counts %&gt;%\n  filter(apisguru_category %in% top_categories)\n\n# Graficar las tendencias de las top categorías a lo largo del tiempo\nggplot(filtered_category_data, aes(x = added_year, y = n_apis, color = apisguru_category)) +\n  geom_line(linewidth = 1) + # Usar geom_line para tendencias\n  geom_point(size = 2) +    # Añadir puntos para cada año\n  labs(\n    title = \"Número de APIs Añadidas por Año para las Categorías Principales\",\n    x = \"Año de Adición\",\n    y = \"Número de APIs Añadidas\",\n    color = \"Categoría de API\"\n  ) +\n  theme_minimal() +\n  scale_x_continuous(breaks = unique(filtered_category_data$added_year)) + # Asegurar que se muestren todos los años\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotar etiquetas para legibilidad\n\n\n\n\n\n\n\n\n\n# Puedes usar los mismos filtered_category_data de antes o seleccionar categorías específicas\nggplot(filtered_category_data, aes(x = added_year, y = n_apis)) +\n  geom_col(fill = \"darkred\") + # O geom_line, según prefieras\n  facet_wrap(~ apisguru_category, scales = \"free_y\", ncol = 2) + # Crea un panel para cada categoría\n  labs(\n    title = \"Número de APIs Añadidas por Año por Categoría\",\n    x = \"Año de Adición\",\n    y = \"Número de APIs Añadidas\"\n  ) +\n  theme_minimal() +\n  theme(\n    strip.text = element_text(face = \"bold\"), # Estilo para los títulos de las facetas\n    axis.text.x = element_text(angle = 45, hjust = 1)\n  )"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#contexto",
+    "href": "posts/datos_ppt.html#contexto",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Contexto",
+    "text": "Contexto\n\n\n\nEvaluar intervención sobre el acceso a un recurso\n💧 El agua configura realidades:\n\nMigrar o permanecer en el territorio\nInvertir en la propia tierra\nEducación familiar\nTransformación del papel de la mujer\n\nCarácter histórico-cultural: Las intervenciones hídricas dejan huella en la memoria colectiva\n\n\n\nPintura callejera en Agadir: memoria histórica de intervenciones hídricas"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#marruecos-frontera-de-tres-mundos",
+    "href": "posts/datos_ppt.html#marruecos-frontera-de-tres-mundos",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Marruecos: Frontera de Tres Mundos",
+    "text": "Marruecos: Frontera de Tres Mundos\n\n\nPosición Geopolítica\n\n🌍 Puerta de Europa (14 km)\n🏜️ Límite del Sahara\n🌊 Salida al Atlántico\n\nEl Desafío Climático\n\n📈 Aridización creciente\n🌡️ Temperaturas en aumento\n💧 Recursos hídricos limitados"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#la-estrategia-nacional-del-agua-al-hub-agrícola-europeo",
+    "href": "posts/datos_ppt.html#la-estrategia-nacional-del-agua-al-hub-agrícola-europeo",
+    "title": "Ampliando datos desde el espacio",
+    "section": "La Estrategia Nacional: Del Agua al “Hub” Agrícola Europeo",
+    "text": "La Estrategia Nacional: Del Agua al “Hub” Agrícola Europeo\n\n\n🏗️ Infraestructura hídrica como base: Presas y riego extensivo desde el siglo XX\n🌱 Transformación productiva: De agricultura de subsistencia a cultivos de alto valor para exportación\n🍊 Especialización estratégica: Frutas y hortalizas intensivas en agua pero altamente rentables\n💰 Ventaja competitiva: Clima + proximidad + gestión hídrica = socio clave de Europa"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#caso-represa-de-aoulouz-1990",
+    "href": "posts/datos_ppt.html#caso-represa-de-aoulouz-1990",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Caso: Represa de Aoulouz (1990)",
+    "text": "Caso: Represa de Aoulouz (1990)\n\n\nLos Afectados\n\n🚫 Sin acceso → Migración\n💸 Pozos costosos → Endeudamiento\n\nLos Ganadores\n\n🔗 Conectados → Modernización\n🏔️ Montañas → Continuidad\n\nEl Resultado\n\n📊 Fragmentación socioeconómica\n🏃‍♂️ Dinámicas migratorias\n🌾 Transformación desigual\n\n\n\n\n\n¿Cómo medimos este impacto complejo?"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#el-dilema-de-la-medición",
+    "href": "posts/datos_ppt.html#el-dilema-de-la-medición",
+    "title": "Ampliando datos desde el espacio",
+    "section": "El Dilema de la Medición",
+    "text": "El Dilema de la Medición\n\n\n\n\n\n\n\n\n\nMétodo\n✅ Ventajas\n❌ Limitaciones\n📊 Información\n\n\n\n\nEncuestas\nPercepción directa, detalles cualitativos\nCostosas, lentas, posibles sesgos\nExperiencia subjetiva\n\n\nProducción\nDatos objetivos, comparables\nSolo output final, no procesos\nToneladas/hectárea\n\n\nAdministrativos\nOficiales, consistentes\nPueden no reflejar realidad local\nConsumo registrado\n\n\n🛰️ Satelitales\nCobertura total, historia completa\nRequiere interpretación técnica\n40+ años continuos\n\n\n\n\n\n\n\n\n\n\nLa Oportunidad\n\n\nLos datos satelitales nos permiten reconstruir la historia desde 1984, con cobertura total del territorio y metodología consistente."
+  },
+  {
+    "objectID": "posts/datos_ppt.html#la-era-de-los-datos-inteligentes",
+    "href": "posts/datos_ppt.html#la-era-de-los-datos-inteligentes",
+    "title": "Ampliando datos desde el espacio",
+    "section": "La Era de los Datos Inteligentes",
+    "text": "La Era de los Datos Inteligentes\n\n\nVivimos un momento único en la historia:\n\n🛰️ Acceso democratizado a datos satelitales\n💻 Poder de procesamiento masivo y barato\n🤖 IA como asistente personal para análisis\n🌍 Cobertura global con detalle sin precedentes\n\n\n\n\n\n\n\n\n⚠️ cuidado…\n\n\nLos datos no son hechos automáticamente. Es fundamental entender de dónde vienen, qué supuestos tienen y cuáles son sus limitaciones."
+  },
+  {
+    "objectID": "posts/datos_ppt.html#años-de-memoria-satelital",
+    "href": "posts/datos_ppt.html#años-de-memoria-satelital",
+    "title": "Ampliando datos desde el espacio",
+    "section": "40 Años de Memoria Satelital",
+    "text": "40 Años de Memoria Satelital\n\n\n\n\n\n1984: 🛰️ Inicio archivo Landsat 5\n1990: 🏗️ ⭐ Culminación Represa Aoulouz\n1994: 🔗 Segunda represa conectada\n2003: 🔥 Ola de calor extrema\n2023: 🌍 Terremoto regional\n2024: 📊 Análisis retrospectivo completo"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#del-espacio-al-dato-metodología",
+    "href": "posts/datos_ppt.html#del-espacio-al-dato-metodología",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Del Espacio al Dato: Metodología",
+    "text": "Del Espacio al Dato: Metodología\n\n\n\n\n\nWuepper et al.2025\n\n\n\nParámetros Técnicos\n\n🎯 Área: Buffer 16km alrededor de Aoulouz\n📅 Período: 1984-2024 (40 años)\n🗓️ Estacionalidad: Mayo-Julio (temporada seca)\n☁️ Filtros: Nubes, sombras, agua, nieve automáticamente removidos\n📏 Resolución: 30 metros (≈ 1 hectárea por 11 píxeles)\n\nControl de Calidad\n\n✅ Validación de rangos: -1 ≤ NDVI ≤ 1\n✅ Enmascaramiento inteligente: QA_PIXEL Colección 2\n✅ Compuestos robustos: Media de múltiples imágenes\n✅ Manejo de errores: Continuidad ante archivos corruptos"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#resultados-preliminares",
+    "href": "posts/datos_ppt.html#resultados-preliminares",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Resultados Preliminares",
+    "text": "Resultados Preliminares\n\n\n\n\n1990-94: Primera represa 🔴 Deterioro generalizado\nPrimera represa insuficiente\n1995-00: La Corrección 🟢 Recuperación masiva\nSegunda represa clave\nBalance Final 🟡 Ganancia neta positiva\nEfectos heterogéneos\n\n\n\n\n\n\n\n\n⚠️\n\n\nUna sola represa fue contraproducente. Solo el sistema completo (dos represas) logró transformar la región. La infraestructura hídrica requiere masa crítica para ser efectiva. Pero en este proceso La geo se muestra que la geografía importa y que hay desigualdad espacial"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#proximidad-y-transformación",
+    "href": "posts/datos_ppt.html#proximidad-y-transformación",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Proximidad y Transformación",
+    "text": "Proximidad y Transformación\n\n\n\n\nPatrón común: - Tendencias paralelas - 📉 Declive 1990-94 - 🚀 Pico 1996 - ✅ Niveles superiores a línea base"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#el-radio-de-influencia",
+    "href": "posts/datos_ppt.html#el-radio-de-influencia",
+    "title": "Ampliando datos desde el espacio",
+    "section": "El Radio de Influencia",
+    "text": "El Radio de Influencia\n\n\n\n\n🟢 Sistema completo domina\n- Efectos a larga distancia - Declive pre-represa\n\n\n\n\n\n\n\n🎯 Radio de Transformación\n\n\n5 km: zona de impacto principal | 16 km: límite de influencia. La primera represa fue completamente inútil en todas las distancias. El sistema completo genera beneficios medibles hasta los límites del área de estudio."
+  },
+  {
+    "objectID": "posts/datos_ppt.html#section-1",
+    "href": "posts/datos_ppt.html#section-1",
+    "title": "Ampliando datos desde el espacio",
+    "section": "",
+    "text": "Limitaciones Técnicas\n\nResolución espacial: 30m puede omitir detalles de parcelas pequeñas\nFactores atmosféricos: Nubes reducen disponibilidad de datos\nInterpretación: NDVI ≠ Productividad económica directa\n\nLimitaciones Metodológicas\n\nCorrelación vs. Causalidad: Mostramos patrones, no mecanismos\nVariables omitidas: Políticas, mercados, decisiones individuales\n\n💡 Implicaciones\n\nLos resultados deben contextualizarse con conocimiento local\nNecesario triangular con otras fuentes de información\nIdeal para generar hipótesis, no para probar causalidad definitiva"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#próximos-pasos-escalando-el-análisis",
+    "href": "posts/datos_ppt.html#próximos-pasos-escalando-el-análisis",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Próximos Pasos: Escalando el Análisis",
+    "text": "Próximos Pasos: Escalando el Análisis\n🚀 Exploración Técnica\n\nMayor resolución: Sentinel-2 (10m) para análisis post-2015\nMúltiples índices: NDWI (agua), EVI (vegetación mejorado)\n\nDeep learning: Clasificación automática de tipos de cultivo\n\n🏗️️ Integración de Datos\n\nValidación de campo: Entrevistas en zonas de alto/bajo cambio\nDatos socioeconómicos: Censos, migración, ingresos\nVariables climáticas: Precipitación, temperatura, sequías\nPolíticas públicas: Timeline de intervenciones gubernamentales\n\n🌍 Escalabilidad\n\nOtras represas en Souss-Massa\nRegiones similares en Marruecos\n\nContexto regional: Norte de África\nComparación global: Proyectos similares"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#gracias",
+    "href": "posts/datos_ppt.html#gracias",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Gracias",
+    "text": "Gracias"
+  },
+  {
+    "objectID": "posts/datos_ppt.html#detalles-técnicos-adicionales",
+    "href": "posts/datos_ppt.html#detalles-técnicos-adicionales",
+    "title": "Ampliando datos desde el espacio",
+    "section": "Detalles Técnicos Adicionales",
+    "text": "Detalles Técnicos Adicionales\n\nEspecificaciones de Procesamiento: - Plataforma: Google Earth Engine (Python API) - Colección: LANDSAT/LT05/C02/T1_L2 (Nivel 2, Reflectancia de Superficie) - Filtros QA: Bits 1,2,3,4 para nubes, sombras, agua, nieve - Proyección: EPSG:4326 (WGS84) - Formato exportación: GeoTIFF, 30m resolución\nEstadísticas del Dataset: - Total de imágenes procesadas: 847 - Período de análisis: 480 meses - Píxeles por imagen: ~280,000\n- Cobertura temporal: 83% (excluyendo períodos nublados)"
   },
   {
     "objectID": "index.html#hello",
@@ -40,5 +145,12 @@
     "title": "Ivan Moreno",
     "section": "Technical Skills",
     "text": "Technical Skills\nProgramming: R (Advanced), Python (Intermediate), SQL\nGeospatial: QGIS, Google Earth Engine, sf (R)\nVisualization: ggplot2, Shiny, interactive dashboards\nAnalysis: Econometrics, machine learning, network analysis\n\n📄 Download CV: English | Español | Deutsch\n\n\nAvailable for remote projects | Open to relocation after November 2025"
+  },
+  {
+    "objectID": "posts/first_draft.html",
+    "href": "posts/first_draft.html",
+    "title": "Quarto experimentation - 1:23 am",
+    "section": "",
+    "text": "My wife lost her entire work of today, apparently the version control tool didn’t work well. I don’t want to left her alone, so I’m here, learning how to use quarto."
   }
 ]
