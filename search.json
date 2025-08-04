@@ -7,6 +7,48 @@
     "text": "# Data\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.0.4     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\ntuesdata &lt;- tidytuesdayR::tt_load('2025-06-17')\n\n---- Compiling #TidyTuesday Information for 2025-06-17 ----\n--- There are 5 files available ---\n\n\n── Downloading files ───────────────────────────────────────────────────────────\n\n  1 of 5: \"api_categories.csv\"\n  2 of 5: \"api_info.csv\"\n  3 of 5: \"api_logos.csv\"\n  4 of 5: \"api_origins.csv\"\n  5 of 5: \"apisguru_apis.csv\"\n\napi_categories &lt;- tuesdata$api_categories\napi_info &lt;- tuesdata$api_info\napi_logos &lt;- tuesdata$api_logos\napi_origins &lt;- tuesdata$api_origins\napisguru_apis &lt;- tuesdata$apisguru_apis\n\n\n# Ver la estructura de los datos (tipos de variables)\nglimpse(apisguru_apis)\n\nRows: 2,529\nColumns: 9\n$ name                      &lt;chr&gt; \"1forge.com\", \"1password.com:events\", \"1pass…\n$ version                   &lt;chr&gt; \"0.0.1\", \"1.0.0\", \"1.5.7\", \"6\", \"1.1.0\", \"1.…\n$ added                     &lt;dttm&gt; 2017-05-30 08:34:14, 2021-07-19 10:17:09, 2…\n$ updated                   &lt;dttm&gt; 2017-06-27 16:49:57, 2023-02-27 15:08:09, 2…\n$ swagger_url               &lt;chr&gt; \"https://api.apis.guru/v2/specs/1forge.com/0…\n$ openapi_ver               &lt;chr&gt; \"2.0\", \"3.0.0\", \"3.0.2\", \"3.0.0\", \"3.0.1\", \"…\n$ link                      &lt;chr&gt; \"https://api.apis.guru/v2/specs/1forge.com/0…\n$ external_docs_description &lt;chr&gt; NA, NA, NA, NA, NA, NA, \"API Documentation\",…\n$ external_docs_url         &lt;chr&gt; NA, NA, NA, NA, NA, NA, \"https://www.abstrac…\n\n# Resumen de las columnas numéricas (si las hubiera)\nsummary(apisguru_apis)\n\n     name             version              added                    \n Length:2529        Length:2529        Min.   :2015-06-11 00:06:11  \n Class :character   Class :character   1st Qu.:2018-03-10 10:08:28  \n Mode  :character   Mode  :character   Median :2020-02-28 16:47:57  \n                                       Mean   :2019-11-20 11:52:53  \n                                       3rd Qu.:2021-02-07 16:13:22  \n                                       Max.   :2023-04-20 23:20:25  \n    updated                    swagger_url        openapi_ver       \n Min.   :2016-04-10 23:18:20   Length:2529        Length:2529       \n 1st Qu.:2019-07-25 10:27:32   Class :character   Class :character  \n Median :2021-02-07 16:23:46   Mode  :character   Mode  :character  \n Mean   :2021-01-17 07:49:56                                        \n 3rd Qu.:2023-03-06 07:12:59                                        \n Max.   :2023-04-21 23:18:02                                        \n     link           external_docs_description external_docs_url \n Length:2529        Length:2529               Length:2529       \n Class :character   Class :character          Class :character  \n Mode  :character   Mode  :character          Mode  :character  \n                                                                \n                                                                \n                                                                \n\n\n\n# Asegurarte de que 'added' es un formato de fecha\napisguru_apis &lt;- apisguru_apis %&gt;%\n  mutate(added_year = year(added)) # Extraer el año de la fecha\n\n# Contar cuántas APIs se añadieron cada año\napis_by_year &lt;- apisguru_apis %&gt;%\n  count(added_year) %&gt;% # Cuenta las ocurrencias de cada año\n  arrange(added_year) # Ordena por año\n\n# Ver el resultado\nprint(apis_by_year)\n\n# A tibble: 9 × 2\n  added_year     n\n       &lt;dbl&gt; &lt;int&gt;\n1       2015    73\n2       2016    62\n3       2017   355\n4       2018   451\n5       2019   192\n6       2020   538\n7       2021   548\n8       2022    47\n9       2023   263\n\n\n\n# Contar cuántas APIs hay en cada categoría\ncategory_counts &lt;- api_categories %&gt;%\n  count(apisguru_category, sort = TRUE) # sort = TRUE ordena de mayor a menor\n\n# Ver el resultado\nprint(category_counts)\n\n# A tibble: 42 × 2\n   apisguru_category     n\n   &lt;chr&gt;             &lt;int&gt;\n 1 cloud               955\n 2 media               340\n 3 open_data           318\n 4 analytics           284\n 5 developer_tools     168\n 6 ecommerce            78\n 7 financial            72\n 8 messaging            62\n 9 entertainment        61\n10 telecom              60\n# ℹ 32 more rows\n\n\n\nggplot(apis_by_year, aes(x = added_year, y = n)) +\n  geom_col(fill = \"steelblue\") + # geom_col para gráficos de barras con conteos\n  labs(title = \"Número de APIs Añadidas a apis.guru por Año\",\n       x = \"Año de Adición\",\n       y = \"Número de APIs\") +\n  theme_minimal() # Un tema de gráfico limpio\n\n\n\n\n\n\n\n\n\nggplot(category_counts %&gt;% head(10), aes(x = reorder(apisguru_category, n), y = n)) +\n  geom_col(fill = \"lightgreen\") +\n  coord_flip() + # Voltea las coordenadas para que las etiquetas sean más legibles\n  labs(title = \"Top 10 Categorías de APIs más Comunes\",\n       x = \"Categoría de API\",\n       y = \"Número de APIs\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n#other\n\njoined_data &lt;- apisguru_apis %&gt;%\n  inner_join(api_categories, by = \"name\")\n\njoined_data &lt;- joined_data %&gt;%\n  mutate(\n    added_year = year(as_datetime(added))\n    )\n\nglimpse(joined_data)\n\nRows: 2,783\nColumns: 11\n$ name                      &lt;chr&gt; \"1forge.com\", \"1password.com:events\", \"1pass…\n$ version                   &lt;chr&gt; \"0.0.1\", \"1.0.0\", \"1.5.7\", \"6\", \"1.1.0\", \"1.…\n$ added                     &lt;dttm&gt; 2017-05-30 08:34:14, 2021-07-19 10:17:09, 2…\n$ updated                   &lt;dttm&gt; 2017-06-27 16:49:57, 2023-02-27 15:08:09, 2…\n$ swagger_url               &lt;chr&gt; \"https://api.apis.guru/v2/specs/1forge.com/0…\n$ openapi_ver               &lt;chr&gt; \"2.0\", \"3.0.0\", \"3.0.2\", \"3.0.0\", \"3.0.1\", \"…\n$ link                      &lt;chr&gt; \"https://api.apis.guru/v2/specs/1forge.com/0…\n$ external_docs_description &lt;chr&gt; NA, NA, NA, NA, NA, NA, \"API Documentation\",…\n$ external_docs_url         &lt;chr&gt; NA, NA, NA, NA, NA, NA, \"https://www.abstrac…\n$ added_year                &lt;dbl&gt; 2017, 2021, 2021, 2017, 2019, 2021, 2021, 20…\n$ apisguru_category         &lt;chr&gt; \"financial\", \"security\", \"security\", \"securi…\n\n\n\ncategory_year_counts &lt;- joined_data %&gt;%\n  group_by(added_year, apisguru_category) %&gt;%\n  summarise(n_apis = n(), .groups = 'drop') %&gt;%\n  #filter(added_year  2022) %&gt;%  \n  arrange(added_year, desc(n_apis)) \n\n\n# Identificar las top N categorías para enfocarse en las más relevantes\ntop_categories &lt;- category_year_counts %&gt;%\n  group_by(apisguru_category) %&gt;%\n  summarise(total_n_apis = sum(n_apis), .groups = 'drop') %&gt;%\n  top_n(10, total_n_apis) %&gt;% # Seleccionar las 10 categorías con más APIs en total\n  pull(apisguru_category) # Extraer solo los nombres de las categorías\n\n# Filtrar los datos para incluir solo estas top categorías\nfiltered_category_data &lt;- category_year_counts %&gt;%\n  filter(apisguru_category %in% top_categories)\n\n# Graficar las tendencias de las top categorías a lo largo del tiempo\nggplot(filtered_category_data, aes(x = added_year, y = n_apis, color = apisguru_category)) +\n  geom_line(linewidth = 1) + # Usar geom_line para tendencias\n  geom_point(size = 2) +    # Añadir puntos para cada año\n  labs(\n    title = \"Número de APIs Añadidas por Año para las Categorías Principales\",\n    x = \"Año de Adición\",\n    y = \"Número de APIs Añadidas\",\n    color = \"Categoría de API\"\n  ) +\n  theme_minimal() +\n  scale_x_continuous(breaks = unique(filtered_category_data$added_year)) + # Asegurar que se muestren todos los años\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotar etiquetas para legibilidad\n\n\n\n\n\n\n\n\n\n# Puedes usar los mismos filtered_category_data de antes o seleccionar categorías específicas\nggplot(filtered_category_data, aes(x = added_year, y = n_apis)) +\n  geom_col(fill = \"darkred\") + # O geom_line, según prefieras\n  facet_wrap(~ apisguru_category, scales = \"free_y\", ncol = 2) + # Crea un panel para cada categoría\n  labs(\n    title = \"Número de APIs Añadidas por Año por Categoría\",\n    x = \"Año de Adición\",\n    y = \"Número de APIs Añadidas\"\n  ) +\n  theme_minimal() +\n  theme(\n    strip.text = element_text(face = \"bold\"), # Estilo para los títulos de las facetas\n    axis.text.x = element_text(angle = 45, hjust = 1)\n  )"
   },
   {
+    "objectID": "posts/first_draft.html",
+    "href": "posts/first_draft.html",
+    "title": "Quarto experimentation - 1:23 am",
+    "section": "",
+    "text": "My wife lost her entire work of today, apparently the version control tool didn’t work well. I don’t want to left her alone, so I’m here, learning how to use quarto."
+  },
+  {
+    "objectID": "index.html#hello",
+    "href": "index.html#hello",
+    "title": "Ivan Moreno",
+    "section": "Hello! 👋",
+    "text": "Hello! 👋\nI’m an Economist and political scientist with 8+ years of experience implementing statistical tools for analysis and decision-making in NGOs, public and private sectors. Currently pursuing MSc in Development Economics at University of Göttingen with DAAD EPOS scholarship.\nMy approach combines quantitative analysis (R, Python, QGIS) with participatory fieldwork to create data-driven solutions for territorial development."
+  },
+  {
+    "objectID": "index.html#what-i-do",
+    "href": "index.html#what-i-do",
+    "title": "Ivan Moreno",
+    "section": "What I Do",
+    "text": "What I Do\n🔍 Data Analysis & Geospatial Analysis - Statistical analysis and econometric modeling - Interactive dashboards and visualization (R, Shiny) - Territorial analysis and mapping (QGIS, Google Earth Engine)\n🤝 Participatory Methodologies - Community engagement and workshop facilitation - Co-creation methodologies for rural development - Multi-stakeholder coordination processes\n📊 Research & Policy - Survey design and analysis - Public policy evaluation and design - Academic research in development economics"
+  },
+  {
+    "objectID": "index.html#featured-projects",
+    "href": "index.html#featured-projects",
+    "title": "Ivan Moreno",
+    "section": "Featured Projects",
+    "text": "Featured Projects\n\nRural Scholarship Allocation Tool\nInterra Foundation (Colombia) | 2023-2024\nInteractive Shiny application optimizing scholarship distribution for 500+ rural youth using multi-criteria algorithms.\nView Application →\n\n\nNational Strategy for Coastal Municipalities\nNational Planning Department (Colombia) | 2020-2023\nCoordinated the design and drafting of a public policy document for 47 coastal municipalities through regional workshops and quantitative analysis\nView Policy Document →\n\n\nLocal Leaders Identification System\nResearch Project | 2017-2020\nApplied network analysis methodology (Godfather Index) to identify community leaders and analyze coordination dynamics, impacting youth across 7 municipalities.\nRead Thesis →"
+  },
+  {
+    "objectID": "index.html#current-position",
+    "href": "index.html#current-position",
+    "title": "Ivan Moreno",
+    "section": "Current Position",
+    "text": "Current Position\nResearch Assistant | Centre for Modern Indian Studies (CEMIS) - University of Göttingen\nJune 2024 - Present\nCoordination of field data collection project in Morocco, developing methods to integrate satellite data with survey information for impact evaluation."
+  },
+  {
+    "objectID": "index.html#technical-skills",
+    "href": "index.html#technical-skills",
+    "title": "Ivan Moreno",
+    "section": "Technical Skills",
+    "text": "Technical Skills\nProgramming: R (Advanced), Python (Intermediate), SQL\nGeospatial: QGIS, Google Earth Engine, sf (R)\nVisualization: ggplot2, Shiny, interactive dashboards\nAnalysis: Econometrics, machine learning, network analysis\n\n📄 Download CV: English | Español | Deutsch\n\n\nAvailable for remote projects | Open to relocation after November 2025"
+  },
+  {
     "objectID": "posts/datos_ppt.html#contexto",
     "href": "posts/datos_ppt.html#contexto",
     "title": "Ampliando datos desde el espacio",
@@ -112,45 +154,31 @@
     "text": "Detalles Técnicos Adicionales\n\nEspecificaciones de Procesamiento: - Plataforma: Google Earth Engine (Python API) - Colección: LANDSAT/LT05/C02/T1_L2 (Nivel 2, Reflectancia de Superficie) - Filtros QA: Bits 1,2,3,4 para nubes, sombras, agua, nieve - Proyección: EPSG:4326 (WGS84) - Formato exportación: GeoTIFF, 30m resolución\nEstadísticas del Dataset: - Total de imágenes procesadas: 847 - Período de análisis: 480 meses - Píxeles por imagen: ~280,000\n- Cobertura temporal: 83% (excluyendo períodos nublados)"
   },
   {
-    "objectID": "index.html#hello",
-    "href": "index.html#hello",
-    "title": "Ivan Moreno",
-    "section": "Hello! 👋",
-    "text": "Hello! 👋\nI’m an Economist and political scientist with 8+ years of experience implementing statistical tools for analysis and decision-making in NGOs, public and private sectors. Currently pursuing MSc in Development Economics at University of Göttingen with DAAD EPOS scholarship.\nMy approach combines quantitative analysis (R, Python, QGIS) with participatory fieldwork to create data-driven solutions for territorial development."
-  },
-  {
-    "objectID": "index.html#what-i-do",
-    "href": "index.html#what-i-do",
-    "title": "Ivan Moreno",
-    "section": "What I Do",
-    "text": "What I Do\n🔍 Data Analysis & Geospatial Analysis - Statistical analysis and econometric modeling - Interactive dashboards and visualization (R, Shiny) - Territorial analysis and mapping (QGIS, Google Earth Engine)\n🤝 Participatory Methodologies - Community engagement and workshop facilitation - Co-creation methodologies for rural development - Multi-stakeholder coordination processes\n📊 Research & Policy - Survey design and analysis - Public policy evaluation and design - Academic research in development economics"
-  },
-  {
-    "objectID": "index.html#featured-projects",
-    "href": "index.html#featured-projects",
-    "title": "Ivan Moreno",
-    "section": "Featured Projects",
-    "text": "Featured Projects\n\nRural Scholarship Allocation Tool\nInterra Foundation (Colombia) | 2023-2024\nInteractive Shiny application optimizing scholarship distribution for 500+ rural youth using multi-criteria algorithms.\nView Application →\n\n\nNational Strategy for Coastal Municipalities\nNational Planning Department (Colombia) | 2020-2023\nCoordinated the design and drafting of a public policy document for 47 coastal municipalities through regional workshops and quantitative analysis\nView Policy Document →\n\n\nLocal Leaders Identification System\nResearch Project | 2017-2020\nApplied network analysis methodology (Godfather Index) to identify community leaders and analyze coordination dynamics, impacting youth across 7 municipalities.\nRead Thesis →"
-  },
-  {
-    "objectID": "index.html#current-position",
-    "href": "index.html#current-position",
-    "title": "Ivan Moreno",
-    "section": "Current Position",
-    "text": "Current Position\nResearch Assistant | Centre for Modern Indian Studies (CEMIS) - University of Göttingen\nJune 2023 - Present\nCoordination of field data collection project in Morocco, developing methods to integrate satellite data with survey information for impact evaluation."
-  },
-  {
-    "objectID": "index.html#technical-skills",
-    "href": "index.html#technical-skills",
-    "title": "Ivan Moreno",
-    "section": "Technical Skills",
-    "text": "Technical Skills\nProgramming: R (Advanced), Python (Intermediate), SQL\nGeospatial: QGIS, Google Earth Engine, sf (R)\nVisualization: ggplot2, Shiny, interactive dashboards\nAnalysis: Econometrics, machine learning, network analysis\n\n📄 Download CV: English | Español | Deutsch\n\n\nAvailable for remote projects | Open to relocation after November 2025"
-  },
-  {
-    "objectID": "posts/first_draft.html",
-    "href": "posts/first_draft.html",
-    "title": "Quarto experimentation - 1:23 am",
+    "objectID": "posts/test_map.html",
+    "href": "posts/test_map.html",
+    "title": "Data Collection Control - Morocco",
     "section": "",
-    "text": "My wife lost her entire work of today, apparently the version control tool didn’t work well. I don’t want to left her alone, so I’m here, learning how to use quarto."
+    "text": "The following map shows the status of each plot according to collected data. Colors indicate:\n\nGreen: Status OK\nRed: Missing\n\nYellow: Duplicate\nGrey: Others/NA"
+  },
+  {
+    "objectID": "posts/test_map.html#map",
+    "href": "posts/test_map.html#map",
+    "title": "Data Collection Control - Morocco",
+    "section": "",
+    "text": "The following map shows the status of each plot according to collected data. Colors indicate:\n\nGreen: Status OK\nRed: Missing\n\nYellow: Duplicate\nGrey: Others/NA"
+  },
+  {
+    "objectID": "posts/test_map.html#data-summary",
+    "href": "posts/test_map.html#data-summary",
+    "title": "Data Collection Control - Morocco",
+    "section": "Data Summary",
+    "text": "Data Summary"
+  },
+  {
+    "objectID": "posts/test_map.html#general-information",
+    "href": "posts/test_map.html#general-information",
+    "title": "Data Collection Control - Morocco",
+    "section": "General Information",
+    "text": "General Information\n\nGenerated: 2025-08-04 10:22:55.570586\nR Version: R version 4.5.0 (2025-04-11 ucrt)\nMain Packages: leaflet, sf, tidyverse, readxl"
   }
 ]
